@@ -9,13 +9,6 @@ class FriendController extends Controller
 {
     public function store(Request $request, User $user)
     {
-        /** 
-        dd{
-            $request->user()->id,
-            $user->id,
-            $request->user()->from()->where('to_id', $user->id)->exists(),
-            $request->user()->to()->where('from_id', $user->id)->exists()
-        };*/
 
         $is_from = $request->user()->from()->where('to_id', $user->id)->exists();
         $is_to = $request->user()->to()->where('from_id', $user->id)->exists();
@@ -29,6 +22,14 @@ class FriendController extends Controller
         }
         
         $request->user()->from()->attach($user);
+
+        return back();
+    }
+    
+    public function update(Request $request, User $user)
+    {
+        // $request->user()->pendingTo()->where('from_id', $user->id)->update(['accepted' => true,]);
+        $request->user()->pendingTo()->updateExistingPivot($user, ['accepted' => true,]);
 
         return back();
     }

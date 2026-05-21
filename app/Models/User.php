@@ -50,6 +50,7 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
     }
 
+    // Relation
     public function from()
     {
         return $this->belongsToMany(User::class, 'friends', 'from_id', 'to_id');
@@ -61,6 +62,11 @@ class User extends Authenticatable
     }
 
     // Friends
+    public function friends()
+    {
+        return $this->friendsFrom->merge($this->friendsTo);
+    }
+    
     public function friendsFrom()
     {
         return $this->from()->wherePivot('accepted', true);

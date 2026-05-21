@@ -10,10 +10,7 @@ class FriendController extends Controller
     public function store(Request $request, User $user)
     {
 
-        $is_from = $request->user()->from()->where('to_id', $user->id)->exists();
-        $is_to = $request->user()->to()->where('from_id', $user->id)->exists();
-
-        if ($is_from || $is_to){
+        if ($request->user()->isRelated($user)){
             return back();
         }
 
